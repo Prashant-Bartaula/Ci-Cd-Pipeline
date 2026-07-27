@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend + Backend Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px 5px;
+            cursor: pointer;
+        }
+        #message {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+        input {
+            padding: 8px;
+            margin: 10px 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Frontend + Backend Example</h1>
+        <p>This website and API both run on port 3000</p>
+        
+        <button onclick="getMessage()">Get Message from Backend</button>
+        
+        <div>
+            <input type="text" id="userInput" placeholder="Type something...">
+            <button onclick="echoMessage()">Send to Backend</button>
+        </div>
+        
+        <div id="message"></div>
+    </div>
+
+    <script>
+        async function getMessage() {
+            try {
+                const response = await fetch('/api/message');
+                const data = await response.json();
+                document.getElementById('message').innerHTML = `
+                    <strong>Backend Response:</strong><br>
+                    Message: ${data.message}<br>
+                    Time: ${data.timestamp}
+                `;
+            } catch (error) {
+                document.getElementById('message').textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function echoMessage() {
+            const input = document.getElementById('userInput').value;
+            try {
+                const response = await fetch('/api/echo', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: input })
+                });
+                const data = await response.json();
+                document.getElementById('message').innerHTML = `
+                    <strong>Backend Echo:</strong><br>
+                    Original: ${data.original}<br>
+                    Echoed: ${data.echoed}<br>
+                    Processed: ${data.processed}
+                `;
+            } catch (error) {
+                document.getElementById('message').textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
