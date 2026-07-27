@@ -1,0 +1,13 @@
+name: Trigger on push to main branch 
+
+on: 
+  push: 
+    branches:
+      - main
+
+jobs: 
+  demo: 
+    runs-on: "ubuntu-latest"
+
+    steps: 
+      - run: echo "running on push to main"

@@ -1,0 +1,11 @@
+name: Manually started workflow example
+
+on: 
+  workflow_dispatch: 
+    
+jobs: 
+  deploy: 
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - run: echo "Manually started"
