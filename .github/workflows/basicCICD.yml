@@ -1,23 +1,23 @@
-# name: Node CI
+name: Node CI
 
-# on:
-#   push:
-#     branches: ["main"]
-#     paths:
-#       - "basicCICD/**"
-#       - ".github/workflows/basicCICD.yml"
-# jobs:
-#   test:
-#     runs-on: ubuntu-latest
-#     defaults:
-#       run:
-#         working-directory: basicCICD
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "basicCICD/**"
+      - ".github/workflows/basicCICD.yml"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: basicCICD
 
-#     steps:
-#       - uses: actions/checkout@v2   
+    steps:
+      - uses: actions/checkout@v2   
 
-#       - uses: actions/setup-node@v4
-#         with: 
-#           node-version: 22
+      - uses: actions/setup-node@v4
+        with: 
+          node-version: 22
 
-#       - run: npm install
+      - run: npm install
