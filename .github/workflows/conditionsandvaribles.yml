@@ -21,6 +21,9 @@ jobs:
       NODE_ENV: test
       MONGO_URL: ${{secrets.MONGO_URL}}
       API_KEY: ${{secrets.API_KEY}}
+    defaults:
+      run:
+        working-directory: reactBoilerplate
 
     steps:
       - uses: actions/checkout@v4
