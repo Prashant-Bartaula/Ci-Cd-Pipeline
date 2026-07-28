@@ -34,7 +34,7 @@ jobs:
 
   deploy_staging:
     needs: test
-    if: ${{github.ref=="refs/heads/develop"}}
+    if: github.ref == 'refs/heads/develop'
     runs-on: "ubuntu-latest"
     env: 
       NODE_ENV: staging
@@ -45,7 +45,7 @@ jobs:
 
   deploy-production:
     needs : test
-    if: ${{github.ref=="refs/heads/main"}}
+    if: github.ref == 'refs/heads/main'
     runs-on: "ubuntu-latest"
     env: 
       NODE_ENV: production
