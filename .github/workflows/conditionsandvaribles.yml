@@ -1,0 +1,53 @@
+##using Repository variable to store  NODE_VERSION and APP_NAME and Repository secrets to store MONGO_URL and API_KEY
+
+name: Using Conditions and Environment Varibles
+
+on: 
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - ".github/workflows/conditionsandvaribles.yml"
+      - "reactBoilerplate/**"
+  pull_request: 
+
+jobs:
+  test:
+    runs-on: "ubuntu-latest"
+    env: 
+      NODE_ENV: test
+      MONGO_URL: ${{secrets.MONGO_URL}}
+      API_KEY: ${{secrets.API_KEY}}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with: 
+          node-version: ${{vars.NODE_VERSION}}
+      - run : npm install
+      - run : npm test 
+
+
+  deploy_staging:
+    needs: test
+    if: github.ref=="refs/heads/develop"
+    runs-on: "ubuntu-latest"
+    env: 
+      NODE_ENV: staging
+
+    steps:
+      - run: echo "Deploying ${{ vars.APP_NAME }} to Staging"
+
+
+  deploy-production:
+    needs : test
+    if: github.ref=="refs/heads/main"
+    runs-on: "ubuntu-latest"
+    env: 
+      NODE_ENV: production
+
+    steps:
+      - run: echo "Deploying ${{ vars.APP_NAME }} to Production"  
+
