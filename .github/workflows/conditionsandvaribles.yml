@@ -11,6 +11,8 @@ on:
       - ".github/workflows/conditionsandvaribles.yml"
       - "reactBoilerplate/**"
   pull_request: 
+    branches:
+      - main
 
 jobs:
   test:
@@ -19,6 +21,9 @@ jobs:
       NODE_ENV: test
       MONGO_URL: ${{secrets.MONGO_URL}}
       API_KEY: ${{secrets.API_KEY}}
+    defaults:
+      run:
+        working-directory: reactBoilerplate
 
     steps:
       - uses: actions/checkout@v4
@@ -32,7 +37,7 @@ jobs:
 
   deploy_staging:
     needs: test
-    if: github.ref=="refs/heads/develop"
+    if: github.ref == 'refs/heads/develop'
     runs-on: "ubuntu-latest"
     env: 
       NODE_ENV: staging
@@ -43,7 +48,7 @@ jobs:
 
   deploy-production:
     needs : test
-    if: github.ref=="refs/heads/main"
+    if: github.ref == 'refs/heads/main'
     runs-on: "ubuntu-latest"
     env: 
       NODE_ENV: production
