@@ -1,0 +1,85 @@
+name: Backend CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+  pull_request:
+
+jobs:
+
+  test:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20, 22]
+
+    env:
+      NODE_ENV: test
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          ## this is built in cache feature. Internally, it uses caching concepts, or we can you own own caching mechanism
+          cache: npm
+
+
+    ## we use npm ci instead of npm install because npm install will install all the dependencies and it will take a lot of time. npm ci will only install the dependencies that are specified in the package.json file. It is designed for automation(deletes existing node_modules, installs exactly whats in package.json, faster).
+      - run: npm ci
+
+      - run: npm run lint
+
+      - run: npm test
+
+  build:
+
+    needs: test
+
+    runs-on: ubuntu-latest
+
+    env:
+      NODE_ENV: production
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-files
+          path: dist/
+
+  deploy:
+
+    needs: build
+
+    if: github.ref == 'refs/heads/main'
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-files
+
+      - run: echo "Deploying application..."

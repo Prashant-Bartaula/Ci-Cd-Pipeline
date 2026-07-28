@@ -1,0 +1,35 @@
+# name: Using cache in yaml
+
+# on : 
+#   push:
+
+
+# jobs: 
+#   test: 
+#     runs-on: "ubuntu-latest"
+
+#     steps: 
+#       - uses: actions/checkout@v4
+
+#       - uses: actions/setup-node@v4
+#         with: 
+#           node-version: 22
+
+#       - name: Cache npm packages
+#         uses: actions/cache@v4
+#         with:
+#           path: ~/.npm
+#           key:  npm-${{ hashFiles('**/package-lock.json') }}
+#           ##if you have matrix of node version or platform then we hash them as well
+#       ##  key: npm-${{ hashFiles('**/package-lock.json') }}-${{ matrix.os }}-${{ matrix.node-version }}
+
+
+#         ##if your package json changes or you cant match the original key we can match partial with restore keys.
+#           restore-keys: |
+#             npm-${{ matrix.node-version }}-npm-
+
+#       - run: npm install
+
+#       - run :  npm test       
+
+       
