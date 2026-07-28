@@ -11,6 +11,8 @@ on:
       - ".github/workflows/conditionsandvaribles.yml"
       - "reactBoilerplate/**"
   pull_request: 
+    branches:
+      - main
 
 jobs:
   test:
